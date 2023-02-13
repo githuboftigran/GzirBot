@@ -19,6 +19,7 @@ class InterruptionsData:
         self.locations = locations
 
     def get_id(self):
+        #TODO try to find something better
         return '{}_{}_{}-{}'.format(self.type, self.locations, self.start_time, self.end_time)
 
 
@@ -34,11 +35,9 @@ def update_interruptions():
 
     # TODO get scraped data instead of this dummy code
     interruptions.clear()
-    # TODO END
-
-
     interruptions.extend(get_veolia_interruptions_data())
     interruptions.extend(get_ena_interruptions_data())
+    # TODO END
 
 
 async def start_scraping(on_update):
