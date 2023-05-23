@@ -9,10 +9,11 @@ months = {
 }
 
 multiple_day_pattern = re.compile('(\w+)\s+(\d).+?(\d+):(\d+)')
-single_day_pattern = re.compile('(\w+)\s+(\d).+?(\d+):(\d+).*?(\d+):(\d+)')
+single_day_pattern = re.compile('(\w+)\s+(\d+).+?(\d+):(\d+).*?(\d+):(\d+)')
 
 
 def get_veolia_start_end(data_str):
+    data_str = data_str.lower()
     time_str = data_str[data_str.index('ս.թ.') + 5:data_str.index('կդադարեցվի')].strip()
     if 'մինչև' in time_str:
         start_str, end_str = time_str.split('մինչև')

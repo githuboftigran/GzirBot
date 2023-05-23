@@ -1,68 +1,85 @@
 from telegram.api import send_message
 from utils import is_keyword_in
+from db import set_keywords, get_all_users, set_notified_ids
 
 users = {}
 
 
+def init_users():
+    users_in_db = get_all_users()
+    for user in users_in_db:
+        user_id = user['user_id']
+        user_obj = User(user_id)
+        user_obj.keywords.update(user['keywords'])
+        user_obj.notified_ids.update(user['notified_ids'])
+        users[user_id] = user_obj
+    print(f'Users initialized. Number of users: {len(users_in_db)}')
+
+
 class User:
-    def __init__(self, user_id, keywords):
+    def __init__(self, user_id):
         self.user_id = user_id
-        self.keywords = set(keywords)
-        self.last_updated_id = -1
+        self.keywords = set()
         self.notified_ids = set()
 
     def add_keywords(self, keywords):
         self.keywords.update(keywords)
+        return self.keywords
 
     def remove_keywords(self, keywords):
         self.keywords = {k for k in self.keywords if k not in keywords}
+        return self.keywords
 
     def clear_keywords(self):
         self.keywords.clear()
+        return self.keywords
 
 
-def notify_all(interruptions, last_id):
+def notify_all(interruptions):
     for user_id in users:
-        notify_user(user_id, interruptions, last_id)
+        notify_user(user_id, interruptions)
 
 
-def notify_user(user_id, interruptions, last_updated_id):
+def notify_user(user_id, interruptions):
     interruptions_to_notify = []
     user = users[user_id]
-    set_last_id_for_user(user_id, last_updated_id)
     for inter in interruptions:
-        if inter.location not in user.notified_ids and is_keyword_in(user.keywords, inter.location):
+        if inter.id not in user.notified_ids and is_keyword_in(user.keywords, inter.location):
             interruptions_to_notify.append(inter)
     if not interruptions_to_notify:
         return
 
-    text = '• '
+    text = ''
     for inter in interruptions_to_notify:
-        text += '•' + inter.location + '\n\n'
-    send_message(user_id, text)
-    user.notified_ids.update([inter.location for inter in interruptions_to_notify])
-
-
-def set_last_id_for_user(user_id, last_updated_id):
-    user = users[user_id]
-    user.last_updated_id = last_updated_id
-    # TODO save in db
+        text += '• ' + inter.location + '\n\n'
+    send_message(user_id, text.strip())
+    add_notified_ids(user_id, [inter.id for inter in interruptions_to_notify])
 
 
 def add_keywords(user_id, keywords):
     if user_id not in users:
-        users[user_id] = User(user_id, keywords)
-    else:
-        users[user_id].add_keywords(keywords)
-    # TODO save in db
+        users[user_id] = User(user_id)
+    users[user_id].add_keywords(keywords)
+    set_keywords(user_id, keywords)
 
 
 def remove_keywords(user_id, keywords):
     if user_id not in users:
-        users[user_id] = User(user_id, set())
-    else:
-        users[user_id].remove_keywords(keywords)
-    # TODO save in db
+        users[user_id] = User(user_id)
+    keywords = users[user_id].remove_keywords(keywords)
+    set_keywords(user_id, keywords)
+
+
+def add_notified_ids(user_id, inter_ids):
+    if user_id not in users:
+        users[user_id] = User(user_id)
+    at_least_one_added = False
+    for inter_id in inter_ids:
+        if inter_id not in users[user_id].notified_ids:
+            users[user_id].notified_ids.add(inter_ids)
+            at_least_one_added = True
+    if at_least_one_added:
+        set_notified_ids(user_id, inter_ids)
 
 
 def get_keywords(user_id):

@@ -36,3 +36,9 @@ show_keywords_text = """
 Here are the keywords you are subscribed to:
 {}
 """
+
+no_keywords_text = 'You are not subscribed to any keywords'
+
+keywords_added_text = 'Keywords added'
+keywords_removed_text = 'Keywords removed'
+
