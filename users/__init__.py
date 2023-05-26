@@ -8,26 +8,24 @@ users = {}
 def init_users():
     users_in_db = get_all_users()
     for user in users_in_db:
-        user_id = user['user_id']
-        user_obj = User(user_id)
-        user_obj.keywords.update(user['keywords'])
-        user_obj.notified_ids.update(user['notified_ids'])
-        users[user_id] = user_obj
+        user_obj = User(**user)
+        users[user_obj.user_id] = user_obj
     print(f'Users initialized. Number of users: {len(users_in_db)}')
 
 
 class User:
-    def __init__(self, user_id):
-        self.user_id = user_id
-        self.keywords = set()
-        self.notified_ids = set()
+
+    def __init__(self, **kwargs):
+        self.user_id = kwargs['user_id']
+        self.keywords = set(kwargs.get('keywords', []))
+        self.notified_ids = set(kwargs.get('notified_ids', []))
 
     def add_keywords(self, keywords):
         self.keywords.update(keywords)
         return self.keywords
 
     def remove_keywords(self, keywords):
-        self.keywords = {k for k in self.keywords if k not in keywords}
+        self.keywords -= set(keywords)
         return self.keywords
 
     def clear_keywords(self):
@@ -51,28 +49,28 @@ def notify_user(user_id, interruptions):
 
     text = ''
     for inter in interruptions_to_notify:
-        text += '• ' + inter.location + '\n\n'
+        text += inter.icon + inter.location + '\n\n'
     send_message(user_id, text.strip())
     add_notified_ids(user_id, [inter.id for inter in interruptions_to_notify])
 
 
 def add_keywords(user_id, keywords):
     if user_id not in users:
-        users[user_id] = User(user_id)
+        users[user_id] = User(user_id=user_id)
     users[user_id].add_keywords(keywords)
     set_keywords(user_id, keywords)
 
 
 def remove_keywords(user_id, keywords):
     if user_id not in users:
-        users[user_id] = User(user_id)
+        users[user_id] = User(user_id=user_id)
     keywords = users[user_id].remove_keywords(keywords)
     set_keywords(user_id, keywords)
 
 
 def add_notified_ids(user_id, inter_ids):
     if user_id not in users:
-        users[user_id] = User(user_id)
+        users[user_id] = User(user_id=user_id)
     at_least_one_added = False
     for inter_id in inter_ids:
         if inter_id not in users[user_id].notified_ids:

@@ -13,7 +13,7 @@ def get_updates():
         "offset": __update_id + 1,
         "timeout": updates_polling_timeout
     }
-    response = requests.get(get_updates_url, params)
+    response = requests.get(get_updates_url, params, timeout=updates_polling_timeout)
     data = json.loads(response.text)
     if data['ok']:
         result = data['result']
@@ -27,4 +27,4 @@ def send_message(userid, message):
         'chat_id': userid,
         'text': message
     }
-    requests.get(send_message_url, params)
+    requests.get(send_message_url, params, timeout=updates_polling_timeout)
