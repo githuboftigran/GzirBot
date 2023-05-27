@@ -8,50 +8,43 @@ months = {
     "հոկտեմբեր": 10, "հոկտեմբերի": 10, "նոյեմբեր": 11, "նոյեմբերի": 11, "դեկտեմբեր": 12, "դեկտեմբերի": 12,
 }
 
-multiple_day_pattern = re.compile('(\w+)\s+(\d).+?(\d+):(\d+)')
-single_day_pattern = re.compile('(\w+)\s+(\d+).+?(\d+):(\d+).*?(\d+):(\d+)')
+range_hours = re.compile('(\w+?)(\d+).+?(\d+)\D+(\d+)\D+(\d+)\D+(\d+)')
+single_day_pattern = re.compile('(?:(\w+?)(\d+))?.+?(\d+)\D+(\d+)')
 
 
 def get_veolia_start_end(data_str):
-    data_str = data_str.lower()
-    time_str = data_str[data_str.index('ս.թ.') + 5:data_str.index('կդադարեցվի')].strip()
+    # Veolia's site is one of the most inconsistent things I've ever seen.
+    # Sometimes each word is wrapped in its own span component. Idiots...
+    data_str = data_str.lower().replace(' ', '')
+    time_str = data_str[data_str.index('ս.թ.') + 4:data_str.index('կդադարեցվի')].strip()
     if 'մինչև' in time_str:
         start_str, end_str = time_str.split('մինչև')
-        parse_edge_time(start_str.strip())
-        parse_edge_time(end_str.strip())
-        return parse_edge_time(start_str.strip()), parse_edge_time(end_str.strip())
-    else:
-        return parse_range_time(time_str)
+        now = datetime.now().replace(second=0, microsecond=0)
+        start = parse_single_day(start_str.strip(), now)
+        end = parse_single_day(end_str.strip(), start)
+        return start, end
+
+    return parse_range_hours(time_str)
 
 
-def parse_range_time(time_str):
-    month, day, s_hour, s_minute, e_hour, e_minute = single_day_pattern.findall(time_str.strip())[0]
-    start = datetime.now().replace(
-        month=months[month],
-        day=int(day),
-        hour=int(s_hour),
-        minute=int(s_minute),
-        second=0,
-        microsecond=0
-    )
-    end = datetime.now().replace(
-        month=months[month],
-        day=int(day),
-        hour=int(e_hour),
-        minute=int(e_minute),
-        second=0,
-        microsecond=0
-    )
+def parse_range_hours(time_str):
+    month, day, s_hour, s_minute, e_hour, e_minute = range_hours.findall(time_str.strip())[0]
+    start = datetime(datetime.now().year, months[month], int(day), int(s_hour), int(s_minute))
+    end = datetime(datetime.now().year, months[month], int(day), int(e_hour), int(e_minute))
     return start, end
 
 
-def parse_edge_time(time_str):
-    month, day, hour, minute = multiple_day_pattern.findall(time_str.strip())[0]
-    return datetime.now().replace(
-        month=months[month],
+def parse_single_day(time_str, base_time):
+    month, day, hour, minute = single_day_pattern.findall(time_str.strip())[0]
+    if not month:
+        month = base_time.month
+    else:
+        month = months[month]
+    if not day:
+        day = base_time.day
+    return base_time.replace(
+        month=month,
         day=int(day),
         hour=int(hour),
-        minute=int(minute),
-        second=0,
-        microsecond=0
+        minute=int(minute)
     )
