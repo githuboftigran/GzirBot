@@ -13,8 +13,11 @@ inter_id_pattern = re.compile('\w+?(\d+)')
 
 
 class VeoliaInterruptionsData(InterruptionsData):
+    icon = '💧'
+    type = 'water'
+
     def __init__(self, inter_id, location, start_time, end_time):
-        InterruptionsData.__init__(self, 'water', inter_id, location, start_time, end_time)
+        InterruptionsData.__init__(self, inter_id, location, start_time, end_time)
 
 
 def get_veolia_interruptions_data():
@@ -23,7 +26,6 @@ def get_veolia_interruptions_data():
     grouped_by_days = soup.select('div.panel-group')
     inters = [scrape_single_day(day_element) for day_element in grouped_by_days]
     print('Veolia interruption updates received')
-    print(f'Veolia interruption ids: {[inter.id for inter in inters]}')
     return inters
 
 
@@ -36,30 +38,19 @@ def scrape_single_day(day_element):
         inter_id = list(heading_tag.children)[0].strip()
         # TODO Log this somewhere?
         print(f'!!! WARNING !!! Element id was not found. Title: {inter_id}')
-
+    content_container = day_element.select('div.panel-body')[0]
+    print(f'inter id: {inter_id}')
     # We do this because veolia is so inconsistent that texts are sometimes in spans and sometimes in paragraphs.
-    text_containers = day_element.findAll(['span', 'p'])
+    all_texts = content_container.findAll(text=True)
+
     content = []
-    # We don't need texts before the one which contains "ս.թ."
-    # When we see it, we set this flag to True, so next parts will be added to content.
-    should_add_to_content = False
-    for container in text_containers:
-        for child in container.children:
-            if isinstance(child, NavigableString):
-                stripped = child.strip()
-                if 'ս.թ.' in stripped.lower():
-                    should_add_to_content = True
-                if should_add_to_content:
-                    content.append(stripped)
-                # We don't need the part after 'ջրամատակարարում'
-                if 'ջրամատակարարում' in stripped:
-                    break
-        # We don't need the part after 'ջրամատակարարում'
-        # So if the last added text to content contains 'ջրամատակարարում', break the loop.
-        if content and 'ջրամատակարարում' in content[-1]:
-            break
+    for text in all_texts:
+        stripped = text.strip()
+        if stripped:
+            content.append(stripped)
 
     content_text = ' '.join(content)
+    content_text = content_text[:content_text.find('ջրամատակարարում')] + 'ջրամատակարարումը:'
     # Veolia adds multiple spaces sometimes, so we replace them with 1 space.
     content_text = re.sub(whitespaces_pattern, ' ', content_text)
     start, end = get_veolia_start_end(content_text)
