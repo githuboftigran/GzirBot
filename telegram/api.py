@@ -2,8 +2,8 @@ import asyncio
 import json
 import requests
 
-from constants import updates_polling_timeout, updates_failure_timeout
-from telegram.constants import get_updates_url, send_message_url
+from constants import UPDATES_POLLING_TIMEOUT, UPDATES_FAILURE_TIMEOUT
+from telegram.constants import GET_UPDATES_URL, SEND_MESSAGE_URL
 
 
 update_id = -2
@@ -13,9 +13,9 @@ def get_updates():
     global update_id
     params = {
         "offset": update_id + 1,
-        "timeout": updates_polling_timeout
+        "timeout": UPDATES_POLLING_TIMEOUT
     }
-    response = requests.get(get_updates_url, params, timeout=updates_polling_timeout)
+    response = requests.get(GET_UPDATES_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
     data = json.loads(response.text)
     if data['ok']:
         result = data['result']
@@ -30,7 +30,7 @@ def send_message(userid, message):
         'chat_id': userid,
         'text': message
     }
-    requests.get(send_message_url, params, timeout=updates_polling_timeout)
+    requests.get(SEND_MESSAGE_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
 
 
 async def start_receiving_updates(on_update):
@@ -44,7 +44,7 @@ async def start_receiving_updates(on_update):
     while True:
         updates = get_updates()
         if updates is None:
-            await asyncio.sleep(updates_failure_timeout)
+            await asyncio.sleep(UPDATES_FAILURE_TIMEOUT)
             continue
 
         on_update(updates)

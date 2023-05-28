@@ -1,1 +1,1 @@
-interruptions_url = 'https://interactive.vjur.am/'
+INTERRUPTIONS_URL = 'https://interactive.vjur.am/'

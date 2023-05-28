@@ -2,13 +2,13 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from constants import whitespaces_pattern
+from constants import WHITESPACES_PATTERN
 from scraping.veolia.utils import get_veolia_start_end
-from scraping.veolia.constants import interruptions_url
+from scraping.veolia.constants import INTERRUPTIONS_URL
 
 from scraping.InterruptionsData import InterruptionsData
 
-inter_id_pattern = re.compile('\w+?(\d+)')
+INTER_ID_PATTERN = re.compile(r'\w+?(\d+)')
 
 
 class VeoliaInterruptionsData(InterruptionsData):
@@ -20,7 +20,7 @@ class VeoliaInterruptionsData(InterruptionsData):
 
 
 def get_veolia_interruptions_data():
-    page = requests.get(interruptions_url)
+    page = requests.get(INTERRUPTIONS_URL)
     soup = BeautifulSoup(page.content, 'html.parser')
     grouped_by_days = soup.select('div.panel-group')
     inters = [scrape_single_day(day_element) for day_element in grouped_by_days]
@@ -31,7 +31,7 @@ def get_veolia_interruptions_data():
 def scrape_single_day(day_element):
     element_id = day_element.get('id')
     if element_id:
-        inter_id = inter_id_pattern.findall(element_id.strip())[0]
+        inter_id = INTER_ID_PATTERN.findall(element_id.strip())[0]
     else:
         heading_tag = day_element.select('div.panel-heading > a')[0]
         inter_id = list(heading_tag.children)[0].strip()
@@ -50,7 +50,7 @@ def scrape_single_day(day_element):
     content_text = ' '.join(content)
     content_text = content_text[:content_text.find('ջրամատակարարում')] + 'ջրամատակարարումը:'
     # Veolia adds multiple spaces sometimes, so we replace them with 1 space.
-    content_text = re.sub(whitespaces_pattern, ' ', content_text)
+    content_text = re.sub(WHITESPACES_PATTERN, ' ', content_text)
     start, end = get_veolia_start_end(content_text)
 
     return VeoliaInterruptionsData(inter_id, content_text, start, end)

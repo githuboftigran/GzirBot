@@ -7,6 +7,6 @@ try:
 except:
     print('Could not read token file')
 
-telegram_api_url = f'https://api.telegram.org/bot{token}'
-get_updates_url = telegram_api_url + '/getUpdates'
-send_message_url = telegram_api_url + '/sendMessage'
+TELEGRAM_API_URL = f'https://api.telegram.org/bot{token}'
+GET_UPDATES_URL = TELEGRAM_API_URL + '/getUpdates'
+SEND_MESSAGE_URL = TELEGRAM_API_URL + '/sendMessage'

@@ -1,16 +1,16 @@
 import re
 
-updates_polling_timeout = 60
-updates_failure_timeout = 10
+UPDATES_POLLING_TIMEOUT = 60
+UPDATES_FAILURE_TIMEOUT = 10
 
-update_interruptions_interval = 60 * 60
+UPDATE_INTERRUPTIONS_INTERVAL = 60 * 60
 
-day_seconds = 60 * 60 * 24
-interruption_lifespan = day_seconds
+DAY_SECONDS = 60 * 60 * 24
+INTERRUPTION_LIFESPAN = DAY_SECONDS
 
-whitespaces_pattern = re.compile(r"\s+")
+WHITESPACES_PATTERN = re.compile(r'\s+')
 
-help_text = """
+HELP_TEXT = """
 Here are the following commands available:
 
 /help
@@ -30,15 +30,15 @@ This will show current keywords you are subscribed to.
 All the data is taken from: https://interactive.vjur.am/
 """
 
-unknown_command_text = f'Unknown command.\n{help_text}'
+UNKNOWN_COMMAND_TEXT = f'Unknown command.\n{HELP_TEXT}'
 
-show_keywords_text = """
+SHOW_KEYWORDS_TEXT = """
 Here are the keywords you are subscribed to:
 {}
 """
 
-no_keywords_text = 'You are not subscribed to any keywords'
+NO_KEYWORDS_TEXT = 'You are not subscribed to any keywords'
 
-keywords_added_text = 'Keywords added'
-keywords_removed_text = 'Keywords removed'
+KEYWORDS_ADDED_TEXT = 'Keywords added'
+KEYWORDS_REMOVED_TEXT = 'Keywords removed'
 
