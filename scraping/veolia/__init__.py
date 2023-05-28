@@ -1,0 +1,1 @@
+from scraping.veolia.scraper import get_veolia_interruptions_data

@@ -1,0 +1,4 @@
+to run mongo on mac:
+brew services start mongodb-community@6.0
+OR
+mongod --config ./mongod.conf --fork

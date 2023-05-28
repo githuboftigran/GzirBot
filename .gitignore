@@ -124,6 +124,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+db/data
 # Pyre type checker
 .pyre/
+.idea/
+tgtoken
