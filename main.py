@@ -2,12 +2,10 @@ import asyncio
 
 from telegram import start_receiving_updates
 from telegram.api import send_message
-from scraping import start_scraping
 
-from users import notify_user, notify_all, add_keywords, remove_keywords, get_keywords
+from users import init_users, notify_user, notify_all, add_keywords, remove_keywords, get_keywords
 from constants import UNKNOWN_COMMAND_TEXT, SHOW_KEYWORDS_TEXT, KEYWORDS_ADDED_TEXT, KEYWORDS_REMOVED_TEXT, HELP_TEXT, NO_KEYWORDS_TEXT
-from scraping import interruptions
-from users import init_users
+from scraping import interruptions, start_scraping
 
 
 def handle_scraping_updates(interruption_updates):
