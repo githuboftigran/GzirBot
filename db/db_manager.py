@@ -11,7 +11,8 @@ def set_keywords(user_id, keywords):
         users.insert_one({
             'user_id': user_id,
             'keywords': keywords,
-            'notified_ids': []
+            'notified_ids': [],
+            'language': 'en',
         })
     else:
         users.updat_one(
@@ -26,7 +27,8 @@ def set_notified_ids(user_id, notified_ids):
         users.insert_one({
             'user_id': user_id,
             'keywords': [],
-            'notified_ids': notified_ids
+            'notified_ids': notified_ids,
+            'language': 'en',
         })
     else:
         users.updat_one(

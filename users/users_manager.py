@@ -17,6 +17,7 @@ class User:
 
     def __init__(self, **kwargs):
         self.user_id = kwargs['user_id']
+        self.language = kwargs.get('language', 'en')
         self.keywords = set(kwargs.get('keywords', []))
         self.notified_ids = set(kwargs.get('notified_ids', []))
 
