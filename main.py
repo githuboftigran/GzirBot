@@ -10,7 +10,8 @@ from constants import \
     KEYWORDS_ADDED_TEXT,\
     KEYWORDS_REMOVED_TEXT,\
     HELP_TEXT,\
-    NO_KEYWORDS_TEXT
+    NO_KEYWORDS_TEXT,\
+    KEYWORDS_NOT_SPECIFIED_TEXT
 from scraping import interruptions, start_scraping
 
 
@@ -25,11 +26,11 @@ def handle_telegram_updates(updates):
         message = update['message']
         user_id = message['from']['id']
         text = message['text'].strip()
+        if text in ('/add', '/remove'):
+            send_message(user_id, KEYWORDS_NOT_SPECIFIED_TEXT)
+            return
         if text.startswith('/add'):
             keywords = text[len('/add'):].strip().split(',')
-            if not keywords:
-                send_message(user_id, NO_KEYWORDS_TEXT)
-                return
             keywords = [k.strip().lower() for k in keywords]
             add_keywords(user_id, keywords)
             current_keywords_text = SHOW_KEYWORDS_TEXT.format(', '.join(get_keywords(user_id)))
@@ -37,9 +38,6 @@ def handle_telegram_updates(updates):
             notify_user(user_id, interruptions.values())
         elif text.startswith('/remove'):
             keywords = text[len('/remove'):].strip().split(',')
-            if not keywords:
-                send_message(user_id, NO_KEYWORDS_TEXT)
-                return
             keywords = [k.strip().lower() for k in keywords]
             remove_keywords(user_id, keywords)
             current_keywords_text = SHOW_KEYWORDS_TEXT.format(', '.join(get_keywords(user_id)))

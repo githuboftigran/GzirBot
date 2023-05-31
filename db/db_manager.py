@@ -15,7 +15,7 @@ def set_keywords(user_id, keywords):
             'language': 'en',
         })
     else:
-        users.updat_one(
+        users.update_one(
             {'user_id': user_id},
             {'keywords': keywords}
         )

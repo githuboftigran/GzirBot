@@ -38,7 +38,7 @@ All the announcements data is scraped from: https://interactive.vjur.am
 
 UNKNOWN_COMMAND_TEXT = f'Unknown command.\n{HELP_TEXT}'
 
-NO_KEYWORDS_TEXT = """No keywords are specified.
+KEYWORDS_NOT_SPECIFIED_TEXT = """No keywords are specified.
 
 Please don't tap on the command in bots command list.
 
