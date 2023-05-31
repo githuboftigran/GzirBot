@@ -13,12 +13,12 @@ def update_interruptions():
     global interruptions
 
     scraped = get_veolia_interruptions_data()
-    #TODO get data from ENA as well
+    #  TODO get data from ENA as well
 
     now = datetime.now().timestamp()
     # filter out outdated data and duplicates from new items.
     scraped = [s for s in scraped if s.end_time.timestamp() > now - INTERRUPTION_LIFESPAN and s.id not in interruptions]
-    print(f'Received new veolia interruptions data: {[s.id for s in scraped]}')
+    print(f'Received new veolia interruptions data. Ids: {[s.id for s in scraped]}')
     # filter out outdated data from current items.
     for inter_id, interruption in interruptions.items():
         if interruption.end_time.timestamp() <= now - INTERRUPTION_LIFESPAN:
