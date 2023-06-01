@@ -25,7 +25,7 @@ Example: `/add Նալբանդյան, Ա.Ահարոնյան, Փարպեցի`
 
 /remove keywords
 Keywords should be separated by commas.
-Example: `/add Նալբանդյան, Ա.Ահարոնյան, Փարպեցի`
+Example: `/remove Նալբանդյան, Ա.Ահարոնյան, Փարպեցի`
 
 /show
 This will show current keywords you are subscribed to.

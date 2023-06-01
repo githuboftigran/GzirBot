@@ -22,7 +22,7 @@ def set_keywords(user_id, keywords):
     else:
         users.update_one(
             {'user_id': user_id},
-            {'keywords': keywords}
+            {"$set": {'keywords': keywords}},
         )
 
 
@@ -36,9 +36,9 @@ def set_notified_ids(user_id, notified_ids):
             'language': 'en',
         })
     else:
-        users.updat_one(
+        users.update_one(
             {'user_id': user_id},
-            {'notified_ids': notified_ids}
+            {"$set": {'notified_ids': notified_ids}},
         )
 
 
