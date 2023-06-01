@@ -75,7 +75,7 @@ def add_notified_ids(user_id, inter_ids):
     at_least_one_added = False
     for inter_id in inter_ids:
         if inter_id not in users[user_id].notified_ids:
-            users[user_id].notified_ids.add(inter_ids)
+            users[user_id].notified_ids.update(inter_ids)
             at_least_one_added = True
     if at_least_one_added:
         set_notified_ids(user_id, inter_ids)
