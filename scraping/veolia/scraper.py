@@ -20,7 +20,12 @@ class VeoliaInterruptionsData(InterruptionsData):
 
 
 def get_veolia_interruptions_data():
-    page = requests.get(INTERRUPTIONS_URL)
+    try:
+        page = requests.get(INTERRUPTIONS_URL)
+    except requests.exceptions.RequestException as any_ex:
+        print('Something went wrong while getting updates from Veolia')
+        print(any_ex)
+        return None
     soup = BeautifulSoup(page.content, 'html.parser')
     grouped_by_days = soup.select('div.panel-group')
     inters = [scrape_single_day(day_element) for day_element in grouped_by_days]

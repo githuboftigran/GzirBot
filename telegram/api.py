@@ -15,7 +15,12 @@ def get_updates():
         "offset": update_id + 1,
         "timeout": UPDATES_POLLING_TIMEOUT
     }
-    response = requests.get(GET_UPDATES_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
+    try:
+        response = requests.get(GET_UPDATES_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
+    except requests.exceptions.RequestException as any_ex:
+        print('Something went wrong while getting updates from telegram')
+        print(any_ex)
+        return None
     data = json.loads(response.text)
     if data['ok']:
         result = data['result']
