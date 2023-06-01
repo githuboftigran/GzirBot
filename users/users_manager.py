@@ -58,15 +58,15 @@ def notify_user(user_id, interruptions):
 def add_keywords(user_id, keywords):
     if user_id not in users:
         users[user_id] = User(user_id=user_id)
-    users[user_id].add_keywords(keywords)
-    set_keywords(user_id, keywords)
+    keywords = users[user_id].add_keywords(keywords)
+    set_keywords(user_id, list(keywords))
 
 
 def remove_keywords(user_id, keywords):
     if user_id not in users:
         users[user_id] = User(user_id=user_id)
     keywords = users[user_id].remove_keywords(keywords)
-    set_keywords(user_id, keywords)
+    set_keywords(user_id, list(keywords))
 
 
 def add_notified_ids(user_id, inter_ids):
@@ -78,7 +78,7 @@ def add_notified_ids(user_id, inter_ids):
             users[user_id].notified_ids.update(inter_ids)
             at_least_one_added = True
     if at_least_one_added:
-        set_notified_ids(user_id, inter_ids)
+        set_notified_ids(user_id, list(users[user_id].notified_ids))
 
 
 def get_keywords(user_id):
