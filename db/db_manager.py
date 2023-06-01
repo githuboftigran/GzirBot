@@ -1,6 +1,11 @@
 from pymongo import MongoClient
+from urllib.parse import quote_plus
 
-client = MongoClient("mongodb://127.0.0.1:27017")
+password_file = open('mongopassword')
+password = quote_plus(password_file.read())
+password_file.close()
+
+client = MongoClient(f'mongodb+srv://mailoftigran:{password}@gzirbot.otdu6rv.mongodb.net/?retryWrites=true&w=majority')
 interruptions_db = client['interruptions-data']
 users = interruptions_db.users
 

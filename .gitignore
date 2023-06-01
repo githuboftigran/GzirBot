@@ -129,3 +129,4 @@ db/data
 .pyre/
 .idea/
 tgtoken
+mongopassword
