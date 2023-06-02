@@ -1,4 +1,4 @@
-import asyncio
+import time
 import json
 import requests
 
@@ -38,7 +38,7 @@ def send_message(userid, message):
     requests.get(SEND_MESSAGE_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
 
 
-async def start_receiving_updates(on_update):
+def start_receiving_updates(on_update):
     """
     This function will wait for updates from telegram infinitely.
     Whenever an update is received, on_update callback will be called and the update data will be passed as an argument.
@@ -49,7 +49,7 @@ async def start_receiving_updates(on_update):
     while True:
         updates = get_updates()
         if updates is None:
-            await asyncio.sleep(UPDATES_FAILURE_TIMEOUT)
+            time.sleep(UPDATES_FAILURE_TIMEOUT)
             continue
 
         on_update(updates)

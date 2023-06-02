@@ -1,4 +1,4 @@
-import asyncio
+from threading import Thread
 
 from telegram import start_receiving_updates
 from telegram.api import send_message
@@ -55,14 +55,13 @@ def handle_telegram_updates(updates):
             send_message(user_id, UNKNOWN_COMMAND_TEXT)
 
 
-async def main():
+def main():
     init_users()
-    loop = asyncio.get_event_loop()
-    scraping_task = loop.create_task(start_scraping(handle_scraping_updates))
-    telegram_updates_task = loop.create_task(start_receiving_updates(handle_telegram_updates))
-    await scraping_task
-    await telegram_updates_task
 
+    scraping_thread = Thread(target=start_scraping, args=(handle_scraping_updates,))
+    telegram_thread = Thread(target=start_receiving_updates, args=(handle_telegram_updates,))
+    telegram_thread.start()
+    scraping_thread.start()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
