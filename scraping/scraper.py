@@ -21,7 +21,7 @@ def update_interruptions():
     scraped = [s for s in scraped if s.end_time.timestamp() > now - INTERRUPTION_LIFESPAN and s.id not in interruptions]
     print(f'Received new announcements data. Ids: {[s.id for s in scraped]}')
     # filter out outdated data from current items.
-    for inter_id, interruption in interruptions.items():
+    for inter_id, interruption in interruptions.copy().items():
         if interruption.end_time.timestamp() <= now - INTERRUPTION_LIFESPAN:
             del interruptions[inter_id]
 
