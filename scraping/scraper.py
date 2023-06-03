@@ -38,5 +38,6 @@ def update_interruptions():
 def start_scraping(on_update):
     while True:
         new_data = update_interruptions()
-        on_update(new_data)
+        if new_data:
+            on_update(new_data)
         time.sleep(UPDATE_INTERRUPTIONS_INTERVAL)
