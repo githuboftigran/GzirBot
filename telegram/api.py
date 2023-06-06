@@ -3,6 +3,7 @@ import json
 import requests
 
 from constants import UPDATES_POLLING_TIMEOUT, UPDATES_FAILURE_TIMEOUT
+from logger import log
 from telegram.constants import GET_UPDATES_URL, SEND_MESSAGE_URL
 
 
@@ -18,8 +19,7 @@ def get_updates():
     try:
         response = requests.get(GET_UPDATES_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
     except requests.exceptions.RequestException as any_ex:
-        print('Something went wrong while getting updates from telegram')
-        print(any_ex)
+        log.e(any_ex)
         return None
     data = json.loads(response.text)
     if data['ok']:
@@ -35,7 +35,10 @@ def send_message(userid, message):
         'chat_id': userid,
         'text': message
     }
-    requests.get(SEND_MESSAGE_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
+    try:
+        requests.get(SEND_MESSAGE_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
+    except requests.exceptions.RequestException as any_ex:
+        log.e(any_ex)
 
 
 def start_receiving_updates(on_update):

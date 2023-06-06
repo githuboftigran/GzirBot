@@ -25,13 +25,13 @@ class Logger:
         print(f'\033[93m{text}\033[0m')
         logging.warning(text)
 
-    def e(self, text=None, error=None):
+    def e(self, text=None, exception=None):
         if text:
             text = Logger.prepend_time(text)
             print(f'\033[91m{text}\033[0m')
-            logging.error(text, exc_info=error)
+            logging.error(text, exc_info=exception)
 
-        if error:
+        if exception:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             error_string = traceback.format_exception(exc_type, exc_value, exc_traceback)
             error_trace = "".join(error_string)
@@ -39,4 +39,5 @@ class Logger:
             print(f'\033[91m{text}\033[0m')
             logging.error(text)
 
-logger = Logger('bot.log')
+
+log = Logger('bot.log')

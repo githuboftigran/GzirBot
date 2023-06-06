@@ -1,5 +1,6 @@
 from telegram.api import send_message
 from utils import is_keyword_in
+from logger import log
 from db import set_keywords, get_all_users, set_notified_ids
 
 users = {}
@@ -10,7 +11,7 @@ def init_users():
     for user in users_in_db:
         user_obj = User(**user)
         users[user_obj.user_id] = user_obj
-    print(f'Users initialized. Number of users: {len(users_in_db)}')
+    log.i(f'Users initialized. Number of users: {len(users_in_db)}')
 
 
 class User:

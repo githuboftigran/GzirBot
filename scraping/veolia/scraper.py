@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from constants import WHITESPACES_PATTERN
+from logger import log
 from scraping.veolia.utils import get_veolia_start_end
 from scraping.veolia.constants import INTERRUPTIONS_URL
 
@@ -23,13 +24,18 @@ def get_veolia_interruptions_data():
     try:
         page = requests.get(INTERRUPTIONS_URL)
     except requests.exceptions.RequestException as any_ex:
-        print('Something went wrong while getting updates from Veolia')
-        print(any_ex)
+        log.e(exception=any_ex)
         return None
     soup = BeautifulSoup(page.content, 'html.parser')
     grouped_by_days = soup.select('div.panel-group')
-    inters = [scrape_single_day(day_element) for day_element in grouped_by_days]
-    print('Veolia interruption updates received')
+    inters = []
+    for day_element in grouped_by_days:
+        try:
+            inter = scrape_single_day(day_element)
+            inters.append(inter)
+        except Exception as any_ex:
+            log.e(exception=any_ex)
+    log.i(f'New veolia interruptions: {[i.id for i in inters]}')
     return inters
 
 
@@ -40,8 +46,7 @@ def scrape_single_day(day_element):
     else:
         heading_tag = day_element.select('div.panel-heading > a')[0]
         inter_id = list(heading_tag.children)[0].strip()
-        # TODO Log this somewhere?
-        print(f'!!! WARNING !!! Element id was not found. Title: {inter_id}')
+        log.w(f'Veolia tag element id was not found. Title: {inter_id}')
     content_container = day_element.select('div.panel-body')[0]
     # We do this because veolia is so inconsistent that texts are sometimes in spans and sometimes in paragraphs.
     all_texts = content_container.findAll(text=True)
