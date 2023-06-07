@@ -23,6 +23,10 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(start, dt(year, 5, 2, 7, 0))
         self.assertEqual(end, dt(year, 5, 2, 9, 0))
 
+        start, end = parse_range_hours('մայիսի2-ինժամը7:00-9:00-նհնարավոր')
+        self.assertEqual(start, dt(year, 5, 2, 7, 0))
+        self.assertEqual(end, dt(year, 5, 2, 9, 0))
+
     def test_parse_single_day(self):
         now = dt.now().replace(second=0, microsecond=0)
         year = now.year
@@ -49,5 +53,9 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(end, dt(year, 5, 25, 8, 0))
 
         start, end = get_veolia_start_end('ս.թ.մայիսի25-ինժամը07.30-08:00-նկդադարեցվի')
+        self.assertEqual(start, dt(year, 5, 25, 7, 30))
+        self.assertEqual(end, dt(year, 5, 25, 8, 0))
+
+        start, end = get_veolia_start_end('ս.թ.մայիսի25-ինժամը07.30-08:00-ն հնարավոր')
         self.assertEqual(start, dt(year, 5, 25, 7, 30))
         self.assertEqual(end, dt(year, 5, 25, 8, 0))

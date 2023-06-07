@@ -16,7 +16,15 @@ def get_veolia_start_end(data_str):
     # Veolia's site is one of the most inconsistent things I've ever seen.
     # Sometimes each word is wrapped in its own span component. Idiots...
     data_str = data_str.lower().replace(' ', '')
-    time_str = data_str[data_str.index('ս.թ.') + 4:data_str.index('կդադարեցվի')].strip()
+    time_start_index = data_str.find('ս.թ.')
+    if time_start_index < 0:
+        return None
+    time_end_index = data_str.find('կդադարեցվի')
+    if time_end_index < 0:
+        time_end_index = data_str.find('հնարավոր')
+    if time_end_index < 0:
+        return None
+    time_str = data_str[time_start_index + 4:time_end_index].strip()
     if 'մինչև' in time_str:
         start_str, end_str = time_str.split('մինչև')
         now = dt.now().replace(second=0, microsecond=0)

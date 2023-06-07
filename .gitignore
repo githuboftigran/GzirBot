@@ -130,3 +130,4 @@ db/data
 .idea/
 tgtoken
 mongopassword
+playground.py
