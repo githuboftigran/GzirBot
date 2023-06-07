@@ -1,1 +1,1 @@
-from users.users_manager import *
+from users.user_manager import *

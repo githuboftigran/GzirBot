@@ -10,35 +10,16 @@ interruptions_db = client['interruptions-data']
 users = interruptions_db.users
 
 
-def set_keywords(user_id, keywords):
+def update_user(user):
+    user_id = user.user_id
     existing_user = users.find_one({'user_id': user_id})
+    user_dict = user.dict()
     if existing_user is None:
-        users.insert_one({
-            'user_id': user_id,
-            'keywords': keywords,
-            'notified_ids': [],
-            'language': 'en',
-        })
+        users.insert_one(user_dict)
     else:
         users.update_one(
             {'user_id': user_id},
-            {"$set": {'keywords': keywords}},
-        )
-
-
-def set_notified_ids(user_id, notified_ids):
-    existing_user = users.find_one({'user_id': user_id})
-    if existing_user is None:
-        users.insert_one({
-            'user_id': user_id,
-            'keywords': [],
-            'notified_ids': notified_ids,
-            'language': 'en',
-        })
-    else:
-        users.update_one(
-            {'user_id': user_id},
-            {"$set": {'notified_ids': notified_ids}},
+            {"$set": user_dict}
         )
 
 

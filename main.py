@@ -25,6 +25,11 @@ def handle_telegram_updates(updates):
             continue
         message = update['message']
         user_id = message['from']['id']
+        username = message['from'].get('username', None)
+        user = {
+            'user_id': user_id,
+            'username': username,
+        }
         text = message['text'].strip()
         if text in ('/add', '/remove'):
             send_message(user_id, KEYWORDS_NOT_SPECIFIED_TEXT)
@@ -32,14 +37,14 @@ def handle_telegram_updates(updates):
         if text.startswith('/add'):
             keywords = text[len('/add'):].strip().split(',')
             keywords = [k.strip().lower() for k in keywords]
-            add_keywords(user_id, keywords)
+            add_keywords(user, keywords)
             current_keywords_text = SHOW_KEYWORDS_TEXT.format(', '.join(get_keywords(user_id)))
             send_message(user_id, f"{KEYWORDS_ADDED_TEXT}\n\n{current_keywords_text}")
             notify_user(user_id, interruptions.values())
         elif text.startswith('/remove'):
             keywords = text[len('/remove'):].strip().split(',')
             keywords = [k.strip().lower() for k in keywords]
-            remove_keywords(user_id, keywords)
+            remove_keywords(user, keywords)
             current_keywords_text = SHOW_KEYWORDS_TEXT.format(', '.join(get_keywords(user_id)))
             send_message(user_id, f"{KEYWORDS_REMOVED_TEXT}\n\n{current_keywords_text}")
         elif text.startswith('/help') or text.startswith('/start'):
