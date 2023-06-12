@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from constants import WHITESPACES_PATTERN
 from logger import log
 from scraping.veolia.utils import get_veolia_start_end
-from scraping.veolia.constants import INTERRUPTIONS_URL
+from scraping.veolia.constants import VEOLIA_INTERRUPTIONS_URL
 
 from scraping.InterruptionsData import InterruptionsData
 
@@ -17,12 +17,12 @@ class VeoliaInterruptionsData(InterruptionsData):
     type = 'water'
 
     def __init__(self, inter_id, location, start_time, end_time):
-        InterruptionsData.__init__(self, inter_id, location, start_time, end_time)
+        InterruptionsData.__init__(self, f'veolia_{inter_id}', location, start_time, end_time)
 
 
 def get_veolia_interruptions_data():
     try:
-        page = requests.get(INTERRUPTIONS_URL)
+        page = requests.get(VEOLIA_INTERRUPTIONS_URL)
     except requests.exceptions.RequestException as any_ex:
         log.e(exception=any_ex)
         return None

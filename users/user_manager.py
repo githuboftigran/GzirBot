@@ -1,5 +1,5 @@
 from telegram.api import send_message
-from utils import is_keyword_in
+from utils import find_keyword
 from logger import log
 from db import update_user, get_all_users
 
@@ -60,7 +60,8 @@ def notify_user(user_id, interruptions):
     interruptions_to_notify = []
     user = users[user_id]
     for inter in interruptions:
-        if inter.id not in user.notified_ids and is_keyword_in(user.keywords, inter.location):
+        keyword_index = find_keyword(user.keywords, inter.location)[0]
+        if inter.id not in user.notified_ids and keyword_index >= 0:
             interruptions_to_notify.append(inter)
     if not interruptions_to_notify:
         return
