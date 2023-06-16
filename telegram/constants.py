@@ -3,6 +3,7 @@ import sys
 from logger import log
 
 TOKEN = ''
+BOT_ID = 6160358458
 
 try:
     token_file = open('tgtoken')

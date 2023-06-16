@@ -110,15 +110,13 @@ def add_notified_ids(user, inter_ids):
     user_id = user['user_id']
     if user_id not in users:
         users[user_id] = User(**user)
-    at_least_one_added = False
     user_obj = users[user_id]
-    for inter_id in inter_ids:
-        if inter_id not in user_obj.notified_ids:
-            users[user_id].notified_ids.update(inter_ids)
-            at_least_one_added = True
-    if at_least_one_added:
-        user_obj.update(**user)
-        user_obj = users[user_id]
+    # To add usernames for users who don't have one
+    user_obj.update(**user)
+    current_ids = set(user_obj.notified_ids)
+    user_obj.notified_ids.update(inter_ids)
+
+    if current_ids != user_obj.notified_ids:
         update_user(user_obj)
 
 

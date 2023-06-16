@@ -13,7 +13,6 @@ WHITESPACES_PATTERN = re.compile(r'\s+')
 HELP_TEXT = """
 GzirBot scrapes Veolia Jurs site every 5 minutes to get information about water interruption announcements.
 Add your street (or village / district / area) name and Gzir will forward the announcements, which contain your specified keywords to you.
-To add or remove keywords, please don't tap on /add or /remove links. Type manually and send as message. E.g. /add Նալբանդյան
 
 Here is the list of available commands:
 
@@ -26,7 +25,7 @@ Keywords should be separated by commas.
 Example: `/remove նալբանդյան, ազատություն, փարպեցի, ուլնեցի`
 
 /show
-This will show current keywords you are subscribed to.
+Show current keywords you are subscribed to.
 
 /help
 Show help text
@@ -44,6 +43,10 @@ Type manually and send as message. E.g.
  /add կոմիտաս, ազատություն
  """
 
+SEND_KEYWORDS_TO_ADD = """Type keywords you want to add"""
+
+SEND_KEYWORDS_TO_REMOVE = """Type keywords you want to remove"""
+
 SHOW_KEYWORDS_TEXT = """
 Here are the keywords you are subscribed to:
 {}
@@ -54,3 +57,4 @@ NO_KEYWORDS_TEXT = 'You are not subscribed to any keywords'
 KEYWORDS_ADDED_TEXT = 'Keywords added'
 KEYWORDS_REMOVED_TEXT = 'Keywords removed'
 
+KEYWORDS_INPUT_PLACEHOLDER = 'E.g. կոմիտաս, մաշտոց, ազատություն'

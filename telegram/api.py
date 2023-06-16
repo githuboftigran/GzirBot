@@ -2,7 +2,7 @@ import time
 import json
 import requests
 
-from constants import UPDATES_POLLING_TIMEOUT, UPDATES_FAILURE_TIMEOUT
+from constants import UPDATES_POLLING_TIMEOUT, UPDATES_FAILURE_TIMEOUT, KEYWORDS_INPUT_PLACEHOLDER
 from logger import log
 from telegram.constants import GET_UPDATES_URL, SEND_MESSAGE_URL
 
@@ -30,13 +30,18 @@ def get_updates():
     return None
 
 
-def send_message(userid, message):
+def send_message(userid, message, force_reply=False):
     params = {
         'chat_id': userid,
-        'text': message
+        'text': message,
     }
+    if force_reply:
+        params['reply_markup'] = json.dumps({
+            'force_reply': True,
+            'input_field_placeholder': KEYWORDS_INPUT_PLACEHOLDER,
+        })
     try:
-        requests.get(SEND_MESSAGE_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
+        requests.post(SEND_MESSAGE_URL, params, timeout=UPDATES_POLLING_TIMEOUT)
     except requests.exceptions.RequestException as any_ex:
         log.e(any_ex)
 
