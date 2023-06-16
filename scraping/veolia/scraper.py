@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 from constants import WHITESPACES_PATTERN
 from logger import log
+from utils import extract_texts
 from scraping.veolia.utils import get_veolia_start_end
 from scraping.veolia.constants import VEOLIA_INTERRUPTIONS_URL
 
@@ -49,15 +50,8 @@ def scrape_single_day(day_element):
         log.w(f'Veolia tag element id was not found. Title: {inter_id}')
     content_container = day_element.select('div.panel-body')[0]
     # We do this because veolia is so inconsistent that texts are sometimes in spans and sometimes in paragraphs.
-    all_texts = content_container.findAll(text=True)
 
-    content = []
-    for text in all_texts:
-        stripped = text.strip()
-        if stripped:
-            content.append(stripped)
-
-    content_text = ' '.join(content)
+    content_text = extract_texts(content_container)
     content_text = content_text[:content_text.find('ջրամատակարարում')] + 'ջրամատակարարումը:'
     # Veolia adds multiple spaces sometimes, so we replace them with 1 space.
     content_text = re.sub(WHITESPACES_PATTERN, ' ', content_text)

@@ -13,3 +13,15 @@ def find_keyword(keywords, text):
         if index >= 0:
             return index, k
     return -1, None
+
+
+def extract_texts(container):
+    all_texts = container.findAll(text=True)
+
+    content = []
+    for text in all_texts:
+        stripped = text.strip()
+        if stripped:
+            content.append(stripped)
+
+    return ' '.join(content)
