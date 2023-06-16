@@ -13,11 +13,13 @@ def get_veolia_start_end(data_str):
     time_start_index = data_str.find('ս.թ.')
     if time_start_index < 0:
         return None
+    # This is in fact just an optimization, to pass smaller strings to regex.
     time_end_index = data_str.find('կդադարեցվի')
     if time_end_index < 0:
         time_end_index = data_str.find('հնարավոր')
-    if time_end_index < 0:
-        return None
+    else:
+        time_end_index = len(data_str)
+
     time_str = data_str[time_start_index + 4:time_end_index].strip()
     if 'մինչև' in time_str:
         start_str, end_str = time_str.split('մինչև')

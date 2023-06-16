@@ -59,3 +59,8 @@ class TestUtils(unittest.TestCase):
         start, end = get_veolia_start_end('ս.թ.մայիսի25-ինժամը07.30-08:00-ն հնարավոր')
         self.assertEqual(start, dt(year, 5, 25, 7, 30))
         self.assertEqual(end, dt(year, 5, 25, 8, 0))
+
+        start, end = get_veolia_start_end('ս.թ. հունիսի 16-ին ժամը 14:00-18:00-ն Ֆիրդուսի փողոցի  ջրամատակարարումը:')
+        self.assertEqual(start, dt(year, 6, 16, 14, 0))
+        self.assertEqual(end, dt(year, 6, 16, 18, 0))
+
