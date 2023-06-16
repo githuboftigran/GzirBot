@@ -1,5 +1,6 @@
 import unittest
 from users.user_manager import User
+from users.keyword_utils import get_similar_keywords
 
 
 class TestUserManager(unittest.TestCase):
@@ -11,39 +12,55 @@ class TestUserManager(unittest.TestCase):
         user = User(user_id='only_id')
         self.assertEqual(user.user_id, 'only_id')
         self.assertEqual(user.username, '')
-        self.assertEqual(user.keywords, set())
+        self.assertEqual(user.keywords, {})
         self.assertEqual(user.notified_ids, set())
         self.assertEqual(user.language, 'en')
+
+        user = User(**{
+            'user_id': 'array_keywords',
+            'keywords': ['ձի', 'փայտե', 'կապեցի', 'շնորհակալություն'],
+        })
+        self.assertEqual(user.user_id, 'array_keywords')
+        self.assertEqual(user.keywords, {
+            'ձի': get_similar_keywords('ձի'),
+            'փայտե': get_similar_keywords('փայտե'),
+            'կապեցի': get_similar_keywords('կապեցի'),
+            'շնորհակալություն': get_similar_keywords('շնորհակալություն'),
+        })
+
+        self.assertCountEqual(
+            user.get_all_keywords(),
+            ['ձի', 'փայտե', 'կապեցի', 'շնորհակալություն'] +
+            get_similar_keywords('ձի') +
+            get_similar_keywords('փայտե') +
+            get_similar_keywords('կապեցի') +
+            get_similar_keywords('շնորհակալություն')
+        )
 
         user = User(**{
             'user_id': 'some_fields',
             'username': 'some_username',
             'language': 'am',
-            'keywords': ['a', 'b', 'c']
         })
+        user.add_keywords(['a', 'b', 'c'])
         self.assertEqual(user.user_id, 'some_fields')
         self.assertEqual(user.username, 'some_username')
-        self.assertEqual(user.keywords, {'a', 'b', 'c'})
+        self.assertEqual(user.keywords, {'a': [], 'b': [], 'c': []})
         self.assertEqual(user.notified_ids, set())
         self.assertEqual(user.language, 'am')
 
         user.add_keywords(['c', 'd', 'e'])
-        self.assertEqual(user.keywords, {'a', 'b', 'c', 'd', 'e'})
+        self.assertEqual(user.keywords, {'a': [], 'b': [], 'c': [], 'd': [], 'e': []})
         user.remove_keywords(['a', 'd'])
-        self.assertEqual(user.keywords, {'b', 'c', 'e'})
+        self.assertEqual(user.keywords, {'b': [], 'c': [], 'e': []})
         user.clear_keywords()
-        self.assertEqual(user.keywords, set())
+        self.assertEqual(user.keywords, {})
         user.add_keywords(['e', 'f'])
         dict_rep = user.dict()
-        # In user object, keywords are kept in a set and the order of added keywords is not preserved.
-        # So we check if the array of keywords is the same first.
-        # Then replace keywords in dictionary with our own, so they will have the same order when checked.
-        self.assertCountEqual(dict_rep['keywords'], ['e', 'f'])
-        dict_rep['keywords'] = ['e', 'f']
         self.assertEqual(dict_rep, {
             'user_id': 'some_fields',
             'username': 'some_username',
             'language': 'am',
-            'keywords': ['e', 'f'],
+            'keywords': {'e': [], 'f': []},
             'notified_ids': []
         })

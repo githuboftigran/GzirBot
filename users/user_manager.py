@@ -1,5 +1,6 @@
 from telegram.api import send_message
 from utils import find_keyword
+from users.keyword_utils import get_similar_keywords
 from logger import log
 from db import update_user, get_all_users
 
@@ -20,25 +21,36 @@ class User:
         self.user_id = kwargs['user_id']
         self.username = kwargs.get('username', '')
         self.language = kwargs.get('language', 'en')
-        self.keywords = set(kwargs.get('keywords', []))
+        self.keywords = kwargs.get('keywords', {})
         self.notified_ids = set(kwargs.get('notified_ids', []))
 
     def add_keywords(self, keywords):
-        self.keywords.update(keywords)
+        for keyword in keywords:
+            if keyword not in self.keywords:
+                self.keywords[keyword] = get_similar_keywords(keyword)
+
         return self.keywords
 
     def remove_keywords(self, keywords):
-        self.keywords -= set(keywords)
+        for keyword in keywords:
+            del self.keywords[keyword]
         return self.keywords
 
     def clear_keywords(self):
         self.keywords.clear()
         return self.keywords
 
+    def get_all_keywords(self):
+        all_keywords = []
+        all_keywords += self.keywords.keys()
+        for similars in self.keywords.values():
+            all_keywords += similars
+        return list(set(all_keywords))
+
     def update(self, **kwargs):
         self.username = kwargs.get('username', self.username)
         self.language = kwargs.get('language', self.language)
-        self.keywords = set(kwargs.get('keywords', self.keywords))
+        self.keywords = kwargs.get('keywords', self.keywords)
         self.notified_ids = set(kwargs.get('notified_ids', self.notified_ids))
 
     def dict(self):
@@ -46,7 +58,7 @@ class User:
             'user_id': self.user_id,
             'username': self.username,
             'language': self.language,
-            'keywords': list(self.keywords),
+            'keywords': self.keywords,
             'notified_ids': list(self.notified_ids)
         }
 
@@ -60,7 +72,7 @@ def notify_user(user_id, interruptions):
     interruptions_to_notify = []
     user = users[user_id]
     for inter in interruptions:
-        keyword_index = find_keyword(user.keywords, inter.location)[0]
+        keyword_index = find_keyword(user.get_all_keywords(), inter.location)[0]
         if inter.id not in user.notified_ids and keyword_index >= 0:
             interruptions_to_notify.append(inter)
     if not interruptions_to_notify:
@@ -113,4 +125,4 @@ def add_notified_ids(user, inter_ids):
 def get_keywords(user_id):
     if user_id not in users:
         return []
-    return users[user_id].keywords
+    return users[user_id].keywords.keys()
