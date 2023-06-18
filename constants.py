@@ -12,7 +12,7 @@ WHITESPACES_PATTERN = re.compile(r'\s+')
 
 HELP_TEXT = """
 GzirBot scrapes Veolia Jurs site every 5 minutes to get information about water interruption announcements.
-Add your street (or village / district / area) name and Gzir will forward the announcements, which contain your specified keywords to you.
+Add your street (or village / district / area) name and GzirBot will forward the announcements, which contain your specified keywords to you.
 
 Here is the list of available commands:
 

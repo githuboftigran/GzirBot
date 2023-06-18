@@ -42,11 +42,12 @@ def get_veolia_interruptions_data():
 
 def scrape_single_day(day_element):
     element_id = day_element.get('id')
+    title_tag = day_element.select('div.panel-heading > a')[0]
+    title = list(title_tag.children)[0].strip()
     if element_id:
         inter_id = INTER_ID_PATTERN.findall(element_id.strip())[0]
     else:
-        heading_tag = day_element.select('div.panel-heading > a')[0]
-        inter_id = list(heading_tag.children)[0].strip()
+        inter_id = title
         log.w(f'Veolia tag element id was not found. Title: {inter_id}')
     content_container = day_element.select('div.panel-body')[0]
     # We do this because veolia is so inconsistent that texts are sometimes in spans and sometimes in paragraphs.
@@ -56,5 +57,6 @@ def scrape_single_day(day_element):
     # Veolia adds multiple spaces sometimes, so we replace them with 1 space.
     content_text = re.sub(WHITESPACES_PATTERN, ' ', content_text)
     start, end = get_veolia_start_end(content_text)
+    content_text = f'{title}\n\n{content_text}'
 
     return VeoliaInterruptionsData(inter_id, content_text, start, end)
