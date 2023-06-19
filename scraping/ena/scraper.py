@@ -1,8 +1,8 @@
 # ENA stands for Electric networks of Armenia
 from datetime import datetime
+import re
 import requests
 from bs4 import BeautifulSoup, NavigableString
-import re
 
 from logger import log
 from utils import extract_texts
@@ -10,6 +10,22 @@ from scraping.ena.constants import ENA_INTERRUPTIONS_URL, ANNOUNCEMENT_PREFIX
 from scraping.ena.utils import get_date, add_time, get_settlement
 from scraping.InterruptionsData import InterruptionsData
 from constants import WHITESPACES_PATTERN
+
+MONTHS = [
+    None,
+    'հունվարի',
+    'փետրվարի',
+    'մարտի',
+    'ապրիլի',
+    'մայիսի',
+    'հունիսի',
+    'հուլիսի',
+    'օգոստոսի',
+    'սեպտեմբերի',
+    'հոկտեմբերի',
+    'նոյեմբերի',
+    'դեկտեմբերի',
+]
 
 
 class EnaInterruptionsData(InterruptionsData):
@@ -45,6 +61,8 @@ def get_ena_interruptions_data():
         if date:
             active_date = date
         s_time, e_time = add_time(active_date, content_text_l)
+        if s_time:
+            content_text = f'{MONTHS[s_time.month]} {s_time.day}-ին ժամը {content_text}'
 
         settlement = get_settlement(content_text, 'քաղաք')
         if not settlement:

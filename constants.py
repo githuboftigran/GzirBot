@@ -11,7 +11,7 @@ INTERRUPTION_LIFESPAN = DAY_SECONDS
 WHITESPACES_PATTERN = re.compile(r'\s+')
 
 HELP_TEXT = """
-GzirBot scrapes Veolia Jurs site every 5 minutes to get information about water interruption announcements.
+GzirBot scrapes Veolia Jurs and ENAs (Electric Networks of Armenia) sites every 5 minutes to get information about utility interruption announcements.
 Add your street (or village / district / area) name and GzirBot will forward the announcements, which contain your specified keywords to you.
 
 Here is the list of available commands:
@@ -30,7 +30,9 @@ Show current keywords you are subscribed to.
 /help
 Show help text
 
-All the announcements data is scraped from: https://interactive.vjur.am
+All the announcements data is scraped from these pages:
+https://interactive.vjur.am
+https://www.ena.am/Info.aspx?id=5
 """
 
 UNKNOWN_COMMAND_TEXT = f'Unknown command.\n{HELP_TEXT}'
