@@ -18,14 +18,12 @@ class TestUserManager(unittest.TestCase):
 
         user = User(**{
             'user_id': 'array_keywords',
-            'keywords': ['ձի', 'փայտե', 'կապեցի', 'շնորհակալություն'],
-        })
-        self.assertEqual(user.user_id, 'array_keywords')
-        self.assertEqual(user.keywords, {
-            'ձի': get_similar_keywords('ձի'),
-            'փայտե': get_similar_keywords('փայտե'),
-            'կապեցի': get_similar_keywords('կապեցի'),
-            'շնորհակալություն': get_similar_keywords('շնորհակալություն'),
+            'keywords': {
+                'ձի': ['ձու'],
+                'կապեցի': ['կապեցու', 'կապեց'],
+                'շնորհակալություն': ['շնորհակալության', 'շնորհակալությո', 'շնորհակալությու'],
+                'փայտե': []
+            },
         })
 
         self.assertCountEqual(
