@@ -3,6 +3,7 @@ from datetime import datetime
 
 from constants import INTERRUPTION_LIFESPAN, UPDATE_INTERRUPTIONS_INTERVAL
 from scraping.veolia import get_veolia_interruptions_data
+from scraping.ena import get_ena_interruptions_data
 
 # This dictionary contains all interruptions.
 # The key of an item is its id.
@@ -12,8 +13,7 @@ interruptions = {}
 def update_interruptions():
     global interruptions
 
-    scraped = get_veolia_interruptions_data()
-    #  TODO get data from ENA as well
+    scraped = get_veolia_interruptions_data() + get_ena_interruptions_data()
 
     now = datetime.now().timestamp()
 

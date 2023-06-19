@@ -7,3 +7,6 @@ class InterruptionsData:
         self.location = location
         self.start_time = start_time
         self.end_time = end_time
+
+    def __repr__(self):
+        return f'{self.start_time} - {self.end_time}\n{self.location}'
