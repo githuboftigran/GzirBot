@@ -37,14 +37,6 @@ https://www.ena.am/Info.aspx?id=5
 
 UNKNOWN_COMMAND_TEXT = f'Unknown command.\n{HELP_TEXT}'
 
-KEYWORDS_NOT_SPECIFIED_TEXT = """No keywords are specified.
-
-Please don't tap on the command in bots command list.
-
-Type manually and send as message. E.g.
- /add կոմիտաս, ազատություն
- """
-
 SEND_KEYWORDS_TO_ADD = """Type keywords you want to add"""
 
 SEND_KEYWORDS_TO_REMOVE = """Type keywords you want to remove"""

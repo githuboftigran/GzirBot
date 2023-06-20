@@ -10,7 +10,6 @@ from constants import \
     KEYWORDS_REMOVED_TEXT,\
     HELP_TEXT,\
     NO_KEYWORDS_TEXT,\
-    KEYWORDS_NOT_SPECIFIED_TEXT,\
     SEND_KEYWORDS_TO_ADD,\
     SEND_KEYWORDS_TO_REMOVE
 from scraping import interruptions, start_scraping
