@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 
+from logger import log
 from constants import INTERRUPTION_LIFESPAN, UPDATE_INTERRUPTIONS_INTERVAL
 from scraping.veolia import get_veolia_interruptions_data
 from scraping.ena import get_ena_interruptions_data
@@ -27,7 +28,7 @@ def update_interruptions():
     #  Nothing new
     if not scraped:
         return
-
+    log.i(f'New announcements: {[i.id for i in scraped]}')
     for inter in scraped:
         interruptions[inter.id] = inter
 

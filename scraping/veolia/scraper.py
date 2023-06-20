@@ -36,7 +36,6 @@ def get_veolia_interruptions_data():
             inters.append(inter)
         except Exception as any_ex:
             log.e(exception=any_ex)
-    log.i(f'Scraped Veolia interruptions: {[i.id for i in inters]}')
     return inters
 
 

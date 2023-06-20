@@ -83,5 +83,4 @@ def get_ena_interruptions_data():
             if content_text[-1:] == ',':
                 content_text = content_text[:-1]
             inters.append(EnaInterruptionsData(inter_id, f'{ANNOUNCEMENT_PREFIX}{content_text}', s_time, e_time))
-    log.i(f'Scraped ENA interruptions: {[i.id for i in inters]}')
     return inters
