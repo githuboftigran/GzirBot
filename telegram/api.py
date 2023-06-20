@@ -7,6 +7,8 @@ from logger import log
 from telegram.constants import GET_UPDATES_URL, SEND_MESSAGE_URL
 
 
+# Telegram keeps update ids to track handled updates.
+# For the first time, -1 should be sent, as all updates should be handled.
 update_id = -2
 
 

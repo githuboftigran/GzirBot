@@ -44,11 +44,19 @@ def get_ena_interruptions_data():
         return None
     soup = BeautifulSoup(page.content, 'html.parser')
     planned_container = soup.find(id='ctl00_ContentPlaceHolder1_attenbody')
-    active_settlement = None
+
     inters = []
+
+    # This variable will be set every time a settlement is found.
+    # It will be used as settlement for the following announcements which don't contain settlement information.
+    active_settlement = None
+    # This variable will be set every time a date information is found.
+    # It will be used as settlement for the following announcements which don't contain date information.
     active_date = datetime.now().replace(second=0, microsecond=0)
+
     for paragraph in planned_container.children:
         if isinstance(paragraph, NavigableString):
+            # Content writer probably uses MS Word, which causes this kind of weird empty tags in html.
             if '<o:p>' in paragraph.text:
                 continue
             content_text = paragraph.text.strip()

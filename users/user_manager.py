@@ -1,7 +1,6 @@
 from telegram.api import send_message
 from utils import find_keyword
 from users.keyword_utils import get_similar_keywords
-from logger import log
 from db import update_user, get_all_users
 
 users = {}
@@ -85,33 +84,29 @@ def notify_user(user_id, interruptions):
     add_notified_ids(user.dict(), [inter.id for inter in interruptions_to_notify])
 
 
-def add_keywords(user, keywords):
+def get_or_create_user(user):
     user_id = user['user_id']
     if user_id not in users:
         users[user_id] = User(**user)
     user_obj = users[user_id]
     user_obj.update(**user)
+    return user_obj
+
+
+def add_keywords(user, keywords):
+    user_obj = get_or_create_user(user)
     user_obj.add_keywords(keywords)
     update_user(user_obj)
 
 
 def remove_keywords(user, keywords):
-    user_id = user['user_id']
-    if user_id not in users:
-        users[user_id] = User(**user)
-    user_obj = users[user_id]
-    user_obj.update(**user)
+    user_obj = get_or_create_user(user)
     user_obj.remove_keywords(keywords)
     update_user(user_obj)
 
 
 def add_notified_ids(user, inter_ids):
-    user_id = user['user_id']
-    if user_id not in users:
-        users[user_id] = User(**user)
-    user_obj = users[user_id]
-    # To add usernames for users who don't have one
-    user_obj.update(**user)
+    user_obj = get_or_create_user(user)
     current_ids = set(user_obj.notified_ids)
     user_obj.notified_ids.update(inter_ids)
 

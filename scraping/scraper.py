@@ -25,8 +25,7 @@ def update_interruptions():
         if interruption.end_time.timestamp() <= now - INTERRUPTION_LIFESPAN:
             del interruptions[inter_id]
 
-    #  Nothing new
-    if not scraped:
+    if not scraped:  # Nothing new
         return
     log.i(f'New announcements: {[i.id for i in scraped]}')
     for inter in scraped:
