@@ -42,7 +42,7 @@ SEND_KEYWORDS_TO_ADD = """Type keywords you want to add"""
 SEND_KEYWORDS_TO_REMOVE = """Type keywords you want to remove"""
 
 SHOW_KEYWORDS_TEXT = """
-Here are the keywords you are subscribed to:
+Your keywords:
 {}
 """
 

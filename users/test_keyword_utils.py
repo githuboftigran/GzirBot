@@ -16,3 +16,5 @@ class TestKeywordUtils(unittest.TestCase):
         self.assertCountEqual(similars, ['ուլնե', 'ուլնեց', 'ուլնեցու'])
         similars = get_similar_keywords('տպագրիչների')
         self.assertCountEqual(similars, ['տպագրիչներ', 'տպագրիչնե', 'տպագրիչներու'])
+        similars = get_similar_keywords('տիգրան մեծ')
+        self.assertCountEqual(similars, ['տիգրան մե', 'տիգրան մ', 'տ մեծ', 'տ.մեծ'])
