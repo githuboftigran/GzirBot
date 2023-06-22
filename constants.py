@@ -11,44 +11,45 @@ INTERRUPTION_LIFESPAN = DAY_SECONDS
 WHITESPACES_PATTERN = re.compile(r'\s+')
 
 HELP_TEXT = """
-GzirBot scrapes Veolia Jurs and ENAs (Electric Networks of Armenia) sites every 5 minutes to get information about utility interruption announcements.
-Add your street (or village / district / area) name and GzirBot will forward the announcements, which contain your specified keywords to you.
+GzirBotը պարբերաբար ստուգում է ՀԷՑ-ի և Վեոլիայի կայքերը և հավաքում կոմունալ անջատումների մասին տվյալները:
+Ավելացրու՜ քեզ հետաքրքրող փողոցների, գյուղերի, շրջանների անունները՝ օգտագործելով /add հրամանը և GzirBotը քեզ կուղարկի դրանց մասին բոլոր հայտարարությունները: 
 
-Here is the list of available commands:
+Հասանելի հրամանները.
 
-/add keywords
-Keywords should be separated by commas.
-Example: `/add նալբանդյան, ազատություն, փարպեցի, ուլնեցի`
+/add տեղանուններ
+Տեղանունները պետք է բաժանված լինեն ստորակետերով:
+Օրինակ: `/add նալբանդյան, տիգրան մեծ, փարպեցի, ուլնեցի`
 
-/remove keywords
-Keywords should be separated by commas.
-Example: `/remove նալբանդյան, ազատություն, փարպեցի, ուլնեցի`
+/remove տեղանուններ
+Տեղանունները պետք է բաժանված լինեն ստորակետերով:
+Օրինակ: `/remove նալբանդյան, ազատություն, փարպեցի, ուլնեցի`
 
 /show
-Show current keywords you are subscribed to.
+Տեսնել իմ տեղանունները:
 
 /help
-Show help text
+Ցույց տալ մանրամասն նկարագրությունը և օգտվելու ձևը:
 
-All the announcements data is scraped from these pages:
+Հայտարարությունները վերցվում են հետևյալ կայքերից.
+
 https://interactive.vjur.am
 https://www.ena.am/Info.aspx?id=5
 """
 
 UNKNOWN_COMMAND_TEXT = f'Unknown command.\n{HELP_TEXT}'
 
-SEND_KEYWORDS_TO_ADD = """Type keywords you want to add"""
+SEND_KEYWORDS_TO_ADD = """Ուղարկի՜ր տեղանուններ՝ ավելացնելու համար:"""
 
-SEND_KEYWORDS_TO_REMOVE = """Type keywords you want to remove"""
+SEND_KEYWORDS_TO_REMOVE = """Ուղարկի՜ր տեղանուններ՝ հեռացնելու համար:"""
 
 SHOW_KEYWORDS_TEXT = """
-Your keywords:
+Քո տեղանունները.
 {}
 """
 
-NO_KEYWORDS_TEXT = 'You are not subscribed to any keywords'
+NO_KEYWORDS_TEXT = 'Դու չես ավելացրել ոչ իմ տեղանուն'
 
-KEYWORDS_ADDED_TEXT = 'Keywords added'
-KEYWORDS_REMOVED_TEXT = 'Keywords removed'
+KEYWORDS_ADDED_TEXT = 'Տեղանուններն ավելացված են'
+KEYWORDS_REMOVED_TEXT = 'Տեղանունները հեռացված են'
 
-KEYWORDS_INPUT_PLACEHOLDER = 'E.g. կոմիտաս, մաշտոց, ազատություն'
+KEYWORDS_INPUT_PLACEHOLDER = 'Օր. կոմիտաս, մաշտոց'

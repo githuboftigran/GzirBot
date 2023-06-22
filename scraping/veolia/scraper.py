@@ -49,8 +49,6 @@ def scrape_single_day(day_element):
         inter_id = title
         log.w(f'Veolia tag element id was not found. Title: {inter_id}')
     content_container = day_element.select('div.panel-body')[0]
-    # We do this because veolia is so inconsistent that texts are sometimes in spans and sometimes in paragraphs.
-
     content_text = extract_texts(content_container)
     content_text = content_text[:content_text.find('ջրամատակարարում')] + 'ջրամատակարարումը:'
     # Veolia adds multiple spaces sometimes, so we replace them with 1 space.
