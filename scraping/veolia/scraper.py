@@ -27,7 +27,11 @@ def get_veolia_interruptions_data():
     except requests.exceptions.RequestException as any_ex:
         log.e(exception=any_ex)
         return None
-    soup = BeautifulSoup(page.content, 'html.parser')
+    return scrape_page(page.content)
+
+
+def scrape_page(text):
+    soup = BeautifulSoup(text, 'html.parser')
     grouped_by_days = soup.select('div.panel-group')
     inters = []
     for day_element in grouped_by_days:

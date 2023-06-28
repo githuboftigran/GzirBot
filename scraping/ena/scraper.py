@@ -45,6 +45,9 @@ def get_ena_interruptions_data():
     soup = BeautifulSoup(page.content, 'html.parser')
     planned_container = soup.find(id='ctl00_ContentPlaceHolder1_attenbody')
 
+    if not planned_container:
+        return []
+
     inters = []
 
     # This variable will be set every time a settlement is found.
