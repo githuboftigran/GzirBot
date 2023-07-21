@@ -26,7 +26,7 @@ def get_veolia_interruptions_data():
         page = requests.get(VEOLIA_INTERRUPTIONS_URL)
     except requests.exceptions.RequestException as any_ex:
         log.e(exception=any_ex)
-        return None
+        return []
     return scrape_page(page.content)
 
 

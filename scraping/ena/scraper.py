@@ -41,7 +41,7 @@ def get_ena_interruptions_data():
         page = requests.get(ENA_INTERRUPTIONS_URL)
     except requests.exceptions.RequestException as any_ex:
         log.e(exception=any_ex)
-        return None
+        return []
     soup = BeautifulSoup(page.content, 'html.parser')
     planned_container = soup.find(id='ctl00_ContentPlaceHolder1_attenbody')
 
