@@ -24,8 +24,8 @@ class User:
 
     def add_keywords(self, keywords):
         for keyword in keywords:
+            keyword = keyword.strip()
             if keyword not in self.keywords:
-                keyword = keyword.strip()
                 self.keywords[keyword] = get_similar_keywords(keyword)
 
         return self.keywords

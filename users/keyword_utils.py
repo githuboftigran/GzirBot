@@ -8,6 +8,7 @@ MIN_LETTERS_TO_KEEP = 5
 
 
 def get_similar_keywords(original_keyword):
+    original_keyword = original_keyword.strip()
     similars = []
     for suffix, replacement in SUFFIXES.items():
         if original_keyword.endswith(suffix):
