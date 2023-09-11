@@ -25,12 +25,14 @@ class User:
     def add_keywords(self, keywords):
         for keyword in keywords:
             if keyword not in self.keywords:
+                keyword = keyword.strip()
                 self.keywords[keyword] = get_similar_keywords(keyword)
 
         return self.keywords
 
     def remove_keywords(self, keywords):
         for keyword in keywords:
+            keyword = keyword.strip()
             del self.keywords[keyword]
         return self.keywords
 
