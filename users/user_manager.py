@@ -33,7 +33,8 @@ class User:
     def remove_keywords(self, keywords):
         for keyword in keywords:
             keyword = keyword.strip()
-            del self.keywords[keyword]
+            if keyword in self.keywords:
+                del self.keywords[keyword]
         return self.keywords
 
     def clear_keywords(self):
